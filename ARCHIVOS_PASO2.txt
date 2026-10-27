@@ -1,0 +1,348 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    LISTA DE ARCHIVOS PASO 2                               ║
+║                  Sistema SYNC DEEA - Utilidades Base                      ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📂 ESTRUCTURA DE CARPETAS
+════════════════════════════════════════════════════════════════════════════
+
+sync-deea/
+├── 📄 lib/
+│   ├── fechas-colombia.ts          (15 KB)  ✅ Motor días hábiles
+│   ├── supabase.ts                 (18 KB)  ✅ Cliente Supabase + CRUD
+│   ├── validations.ts              (16 KB)  ✅ Esquemas Zod
+│   ├── resend.ts                   (15 KB)  ✅ Notificaciones email
+│   └── types.ts                    (17 KB)  ✅ Tipos TypeScript
+│
+├── 📦 Configuración
+│   ├── package.json                (1.6 KB) ✅ Dependencias
+│   ├── tsconfig.json               (639 B)  ✅ TypeScript config
+│   ├── .env.example                (3.2 KB) ✅ Variables de entorno
+│   └── README.md                   (9.1 KB) ✅ Guía del proyecto
+│
+├── 📚 Documentación Paso 2
+│   ├── PASO2_ENTREGA.md            (14 KB)  ✅ Resumen de entrega
+│   ├── PASO2_UTILIDADES_BASE.md    (13 KB)  ✅ Doc. técnica
+│   ├── INDICE_PASO2.md             (6 KB)   ✅ Índice de navegación
+│   ├── RESUMEN_PASO2.txt           (18 KB)  ✅ Resumen visual
+│   └── ARCHIVOS_PASO2.txt          (Este archivo)
+│
+└── 📂 Referencias (Paso 1)
+    ├── PASO1_ESTRUCTURA_ESQUEMA.md (18 KB)  ℹ️ Schema SQL
+    └── ...
+
+════════════════════════════════════════════════════════════════════════════
+
+📋 DESCRIPCIÓN DE CADA ARCHIVO
+════════════════════════════════════════════════════════════════════════════
+
+LIBRERÍAS CORE
+─────────────────────────────────────────────────────────────────────────────
+
+1. lib/fechas-colombia.ts (15 KB, 350+ líneas)
+   ┌─────────────────────────────────────────────────────────────┐
+   │ MOTOR DE DÍAS HÁBILES COLOMBIANOS - Ley 51/1983             │
+   │                                                              │
+   │ Clase CalculadorDiasHabiles (singleton) con funciones:      │
+   │ • sumarHabiles(fecha, dias)                                 │
+   │ • habilesEntre(inicio, fin)                                 │
+   │ • habilesRestantes(vencimiento)                             │
+   │ • calcularSemaforo(dias) → Verde/Ámbar/Rojo/Vencido        │
+   │ • calcularPascua(año)                                       │
+   │ • obtenerFestivos(año)                                      │
+   │ • Y más...                                                   │
+   │                                                              │
+   │ Características:                                             │
+   │ ✓ 9 festivos fijos                                          │
+   │ ✓ 7 festivos móviles (Semana Santa, Corpus, etc.)          │
+   │ ✓ Algoritmo Meeus/Jones/Butcher para Pascua                │
+   │ ✓ Traslados automáticos a lunes (Ley 51/1983)              │
+   │ ✓ Caché Map para performance                               │
+   │ ✓ Integración con tabla festivos_colombia                  │
+   │                                                              │
+   │ Usada por: lib/supabase.ts (calcularSemaforo)              │
+   └─────────────────────────────────────────────────────────────┘
+
+2. lib/supabase.ts (18 KB, 450+ líneas)
+   ┌─────────────────────────────────────────────────────────────┐
+   │ CLIENTE SUPABASE + 20+ CRUD HELPERS                         │
+   │                                                              │
+   │ Clientes:                                                    │
+   │ • supabase (público - cliente)                              │
+   │ • supabaseAdmin (backend-only)                              │
+   │                                                              │
+   │ CRUD Helpers por módulo:                                    │
+   │ • Peticiones: crear, obtener, listar, críticas             │
+   │ • Correspondencia: entrada, salida                          │
+   │ • Contratos: crear, ejecución, supervisión                │
+   │ • Proyectos: crear, hitos, actualizar                      │
+   │ • Agenda: eventos, participantes                            │
+   │ • Pendientes: crear, actualizar, listar                    │
+   │ • Productores & Asociaciones: crud misional                │
+   │ • Almacenamiento: upload/download Storage                  │
+   │                                                              │
+   │ Características:                                             │
+   │ ✓ 20+ funciones CRUD                                        │
+   │ ✓ Error handling robusto                                    │
+   │ ✓ Integración fechas-colombia (semáforo)                   │
+   │ ✓ Auditoría automática                                     │
+   │ ✓ KPI queries (obtenerPeticionesCriticas, etc.)            │
+   │ ✓ Storage upload/download                                  │
+   │                                                              │
+   │ Usada por: Componentes React (todas las operaciones BD)    │
+   └─────────────────────────────────────────────────────────────┘
+
+3. lib/validations.ts (16 KB, 550+ líneas)
+   ┌─────────────────────────────────────────────────────────────┐
+   │ 15 ESQUEMAS ZOD PARA VALIDACIÓN DE FORMULARIOS              │
+   │                                                              │
+   │ Esquemas:                                                    │
+   │ 1. schemaCrearPeticion                                      │
+   │ 2. schemaCambiarEstadoPeticion                              │
+   │ 3. schemaAsignarResponsable                                 │
+   │ 4. schemaCorrespondenciaEntrada                             │
+   │ 5. schemaCorrespondenciaSalida                              │
+   │ 6. schemaCrearContrato                                      │
+   │ 7. schemaActualizarEjecucionContrato                        │
+   │ 8. schemaCuentaCobro                                        │
+   │ 9. schemaCrearProyecto                                      │
+   │ 10. schemaCrearHito                                         │
+   │ 11. schemaCrearEventoAgenda                                 │
+   │ 12. schemaCrearPendiente                                    │
+   │ 13. schemaRegistrarProductor                                │
+   │ 14. schemaRegistrarAsociacion                               │
+   │ 15. schemaRegistroUsuario / schemaLogin                     │
+   │                                                              │
+   │ Patrones regex:                                              │
+   │ • REGEX_CEDULA (8-10 dígitos)                               │
+   │ • REGEX_NIT (formato verificador)                           │
+   │ • REGEX_EMAIL (RFC 5322)                                    │
+   │ • REGEX_TELEFONO (10 dígitos)                               │
+   │ • REGEX_SECOP (formato SECOP II)                            │
+   │                                                              │
+   │ Helper:                                                      │
+   │ validarFormulario<T>(schema, datos)                         │
+   │ → { valido, datos?, errores? }                              │
+   │                                                              │
+   │ Usada por: Componentes de formularios (Paso 3+)            │
+   └─────────────────────────────────────────────────────────────┘
+
+4. lib/resend.ts (15 KB, 500+ líneas)
+   ┌─────────────────────────────────────────────────────────────┐
+   │ NOTIFICACIONES POR CORREO - RESEND + REACT EMAIL            │
+   │                                                              │
+   │ Inicialización:                                              │
+   │ • Cliente Resend (tolerante a falta de API key)             │
+   │ • EMAIL_DESPACHO = 'despacho@montelibano.gov.co'           │
+   │ • EMAIL_SOPORTE = 'soporte@montelibano.gov.co'             │
+   │                                                              │
+   │ Funciones de envío:                                          │
+   │ 1. enviarNotificacionAsignacion()                           │
+   │    → Email al responsable nueva asignación                  │
+   │ 2. enviarResumenDiario()                                    │
+   │    → Cron Job 7:00 a.m. zona Colombia                      │
+   │ 3. enviarCitacionReunion()                                  │
+   │    → Citación a múltiples participantes                     │
+   │ 4. enviarAlertaVencimiento()                                │
+   │    → Alerta Ámbar/Rojo/Vencido                              │
+   │                                                              │
+   │ Templates React Email:                                       │
+   │ • EmailAsignacionPeticion()                                 │
+   │ • EmailResumenDiario()                                      │
+   │ • Templates en HTML renderizado                             │
+   │                                                              │
+   │ Auditoría:                                                   │
+   │ ✓ Registra en historial_emails                             │
+   │ ✓ Captura resend_message_id                                │
+   │ ✓ Almacena contexto (radicado, contrato, tipo)             │
+   │ ✓ Registra errores con descripción                         │
+   │                                                              │
+   │ Usada por: Componentes + Cron Jobs (Vercel)                │
+   └─────────────────────────────────────────────────────────────┘
+
+5. lib/types.ts (17 KB, 450+ líneas)
+   ┌─────────────────────────────────────────────────────────────┐
+   │ TIPOS TYPESCRIPT - GENERADOS DE SUPABASE SCHEMA             │
+   │                                                              │
+   │ Interface Database:                                          │
+   │ • 30 tablas con Row, Insert, Update                         │
+   │ • 13 ENUMs                                                   │
+   │ • 6 funciones PL/pgSQL                                      │
+   │ • Storage paths                                              │
+   │                                                              │
+   │ Tipos derivados enriquecidos:                               │
+   │ • PeticionConDiasHabiles                                    │
+   │ • ContratoConEjecucion                                      │
+   │ • EventoAgendaConParticipantes                              │
+   │ • KPIDashboard                                              │
+   │ • UsuarioConPermisos                                        │
+   │ • SesionUsuario                                             │
+   │ • RespuestaAPI<T>                                           │
+   │ • RespuestaCargarArchivo                                    │
+   │ • ErrorSistema                                              │
+   │                                                              │
+   │ Enums:                                                       │
+   │ • rol_usuario, tipo_peticion, tipo_contrato                │
+   │ • estado_peticion, semaforo, prioridad                     │
+   │ • tipo_correspondencia                                      │
+   │                                                              │
+   │ Usada por: Todos los componentes y funciones (tipado)      │
+   └─────────────────────────────────────────────────────────────┘
+
+
+CONFIGURACIÓN
+─────────────────────────────────────────────────────────────────────────────
+
+6. package.json (1.6 KB)
+   ┌─────────────────────────────────────────────────────────────┐
+   │ DEPENDENCIAS Y SCRIPTS DEL PROYECTO                         │
+   │                                                              │
+   │ Scripts principales:                                         │
+   │ • npm run dev                Build de desarrollo             │
+   │ • npm run build              Build de producción            │
+   │ • npm run lint               Linting TypeScript             │
+   │ • npm run type-check         Verificar tipos TS             │
+   │ • npm run supabase:gen-types Auto-generar tipos             │
+   │                                                              │
+   │ 30 dependencias:                                             │
+   │ • next@14, react@18, typescript@5                           │
+   │ • @supabase/supabase-js, zod, resend                        │
+   │ • tailwindcss, lucide-react, date-fns                       │
+   │ • Y dev dependencies (jest, eslint, prettier)              │
+   │                                                              │
+   │ Node requerido: >=18.0.0                                    │
+   └─────────────────────────────────────────────────────────────┘
+
+7. tsconfig.json (639 B)
+   ┌─────────────────────────────────────────────────────────────┐
+   │ CONFIGURACIÓN TYPESCRIPT                                    │
+   │                                                              │
+   │ • Target: ES2020                                            │
+   │ • strict: true (máxima rigurosidad)                         │
+   │ • baseUrl: . (rutas relativas)                              │
+   │ • paths: {"@/*": ["./*"]} (alias @/)                        │
+   │ • Integración Next.js                                       │
+   │                                                              │
+   │ Resultado: Type safety al 100%                              │
+   └─────────────────────────────────────────────────────────────┘
+
+8. .env.example (3.2 KB)
+   ┌─────────────────────────────────────────────────────────────┐
+   │ TEMPLATE DE VARIABLES DE ENTORNO                            │
+   │                                                              │
+   │ Secciones:                                                   │
+   │ • Supabase (URL, keys)                                      │
+   │ • Resend (API key)                                          │
+   │ • Configuración zona horaria                                │
+   │ • Ambiente (dev/staging/prod)                               │
+   │ • Seguridad (JWT secret, etc.)                              │
+   │ • Opcional: Stripe, Sentry                                  │
+   │                                                              │
+   │ Uso: cp .env.example .env.local y llenar valores            │
+   └─────────────────────────────────────────────────────────────┘
+
+
+DOCUMENTACIÓN
+─────────────────────────────────────────────────────────────────────────────
+
+9. README.md (9.1 KB)
+   • Descripción general del proyecto
+   • Stack tecnológico
+   • Estructura de carpetas
+   • Instrucciones de instalación
+   • Links a documentación detallada
+
+10. PASO2_ENTREGA.md (14 KB)
+    • Resumen ejecutivo de Paso 2
+    • Qué se entrega (5 librerías)
+    • Estadísticas de código
+    • Características implementadas
+    • Cómo usar Paso 2 en Paso 3
+    • Próximos pasos
+
+11. PASO2_UTILIDADES_BASE.md (13 KB)
+    • Documentación técnica detallada
+    • Desglose de cada librería
+    • Integración entre librerías (diagrama)
+    • Ejemplo práctico de flujo
+    • Instrucciones de instalación
+    • Cómo usar cada librería
+    • Características implementadas (checklist)
+
+12. INDICE_PASO2.md (6 KB)
+    • Índice de navegación rápida
+    • Qué archivo revisar para cada tarea
+    • Referencia rápida de funciones
+    • Tabla de estadísticas
+
+13. RESUMEN_PASO2.txt (18 KB)
+    • Resumen visual ejecutivo (ASCII art)
+    • Lista de archivos generados
+    • Funcionalidades por librería
+    • Estadísticas detalladas
+    • Integración entre librerías
+    • Checklist Paso 2 completo
+    • Próximos pasos (Paso 3)
+
+════════════════════════════════════════════════════════════════════════════
+
+📊 TABLA RESUMIDA
+════════════════════════════════════════════════════════════════════════════
+
+Archivo                          | Tamaño | Líneas | Propósito
+─────────────────────────────────┼────────┼────────┼──────────────────────
+lib/fechas-colombia.ts           | 15 KB  | 350+   | Motor días hábiles
+lib/supabase.ts                  | 18 KB  | 450+   | Cliente BD + CRUD
+lib/validations.ts               | 16 KB  | 550+   | Esquemas Zod
+lib/resend.ts                    | 15 KB  | 500+   | Correos transaccionales
+lib/types.ts                     | 17 KB  | 450+   | Tipos TypeScript
+package.json                     | 1.6 KB | -      | Dependencias
+tsconfig.json                    | 639 B  | -      | Config TypeScript
+.env.example                     | 3.2 KB | -      | Vars de entorno
+README.md                        | 9.1 KB | -      | Guía proyecto
+PASO2_ENTREGA.md                 | 14 KB  | -      | Resumen entrega
+PASO2_UTILIDADES_BASE.md         | 13 KB  | -      | Doc. técnica
+INDICE_PASO2.md                  | 6 KB   | -      | Índice navegación
+RESUMEN_PASO2.txt                | 18 KB  | -      | Resumen visual
+─────────────────────────────────┴────────┴────────┴──────────────────────
+TOTAL PASO 2                     | 160 KB | 2,300+ | Código + Docs
+
+════════════════════════════════════════════════════════════════════════════
+
+✅ CÓMO USAR ESTOS ARCHIVOS
+════════════════════════════════════════════════════════════════════════════
+
+1. PRIMERO: Lee esto (orden recomendado)
+   └─ PASO2_ENTREGA.md (5 min) → resumen ejecutivo
+   └─ RESUMEN_PASO2.txt (10 min) → visión completa
+   └─ INDICE_PASO2.md (5 min) → índice de navegación
+
+2. LUEGO: Examina el código
+   └─ lib/validations.ts → entiende esquemas Zod
+   └─ lib/supabase.ts → CRUD disponibles
+   └─ lib/fechas-colombia.ts → cálculos de vencimientos
+   └─ lib/resend.ts → funciones de email
+   └─ lib/types.ts → tipos TypeScript
+
+3. PARA PASO 3: Implementación de Layout
+   └─ Los 5 lib/* serán importados por componentes React
+   └─ Componentes validarán con lib/validations.ts
+   └─ Componentes harán CRUD con lib/supabase.ts
+   └─ Componentes enviarán emails con lib/resend.ts
+
+════════════════════════════════════════════════════════════════════════════
+
+🚀 SIGUIENTE PASO: PASO 3 - LAYOUT Y COMPONENTES BASE
+════════════════════════════════════════════════════════════════════════════
+
+Se creará:
+  1. app/layout.tsx - Layout principal
+  2. components/layout/* - Header, Sidebar, Footer
+  3. components/base/* - Semaforo, DiasRestantes, etc.
+  4. styles/* - CSS variables identidad visual
+  5. app/page.tsx - Dashboard ejecutivo
+
+════════════════════════════════════════════════════════════════════════════
+
+✨ PASO 2 ✅ COMPLETADO - LISTO PARA PASO 3 ✨
+

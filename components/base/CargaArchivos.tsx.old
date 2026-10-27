@@ -1,0 +1,526 @@
+/**
+ * COMPONENTE CARGA DE ARCHIVOS - SYNC DEEA
+ * ============================================================================
+ * 
+ * Upload de documentos (PDFs, imágenes, etc.) a Supabase Storage
+ * Integración con lib/supabase.ts - subirArchivo()
+ * 
+ * Props:
+ * - bucket: 'peticiones' | 'correspondencia' | 'contratos' | 'proyectos'
+ * - carpeta: string (path dentro del bucket, ej: "E-2024-0001/")
+ * - tiposPermitidos: string[] (ej: ['.pdf', '.jpg', '.png'])
+ * - tamañoMaxMB: number
+ * - onCargaCompleta: (ruta: string) => void
+ * - onError: (error: string) => void
+ * - multiple: boolean
+ * 
+ * Ejemplo:
+ * <CargaArchivos
+ *   bucket="peticiones"
+ *   carpeta="E-2024-0001/"
+ *   tiposPermitidos={['.pdf', '.jpg']}
+ *   onCargaCompleta={(ruta) => console.log(`Cargado: ${ruta}`)}
+ * />
+ * 
+ * Autor: Arquitecto de Software Senior (GovTech)
+ */
+
+"use client";
+
+import React, { useRef, useState } from "react";
+import { subirArchivo } from "@/lib/supabase";
+
+type BucketNombre = "peticiones" | "correspondencia" | "contratos" | "proyectos";
+
+interface CargaArchivosProps {
+  bucket: BucketNombre;
+  carpeta: string;
+  tiposPermitidos?: string[];
+  tamañoMaxMB?: number;
+  onCargaCompleta?: (rutaArchivo: string) => void;
+  onError?: (error: string) => void;
+  multiple?: boolean;
+  className?: string;
+}
+
+interface ArchivoCargado {
+  id: string;
+  nombre: string;
+  tamaño: number;
+  estado: "pendiente" | "cargando" | "completado" | "error";
+  progreso: number;
+  error?: string;
+  ruta?: string;
+}
+
+export function CargaArchivos({
+  bucket,
+  carpeta,
+  tiposPermitidos = [".pdf", ".jpg", ".jpeg", ".png", ".doc", ".docx"],
+  tamañoMaxMB = 10,
+  onCargaCompleta,
+  onError,
+  multiple = false,
+  className = "",
+}: CargaArchivosProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [archivos, setArchivos] = useState<ArchivoCargado[]>([]);
+  const [cargando, setCargando] = useState(false);
+
+  const validarArchivo = (archivo: File): string | null => {
+    // Validar tipo
+    const extension = `.${archivo.name.split(".").pop()?.toLowerCase()}`;
+    if (!tiposPermitidos.includes(extension)) {
+      return `Tipo de archivo no permitido. Permitidos: ${tiposPermitidos.join(", ")}`;
+    }
+
+    // Validar tamaño
+    const tamañoMB = archivo.size / (1024 * 1024);
+    if (tamañoMB > tamañoMaxMB) {
+      return `Archivo demasiado grande. Máximo: ${tamañoMaxMB}MB`;
+    }
+
+    return null;
+  };
+
+  const manejarSeleccionArchivos = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const archivosSeleccionados = Array.from(event.target.files || []);
+
+    if (archivosSeleccionados.length === 0) return;
+
+    // Si no es múltiple, solo tomar el primero
+    const archivosProcesar = multiple
+      ? archivosSeleccionados
+      : [archivosSeleccionados[0]];
+
+    // Crear entradas pendientes
+    const nuevosArchivos: ArchivoCargado[] = archivosProcesar.map((archivo) => ({
+      id: `${Date.now()}-${Math.random()}`,
+      nombre: archivo.name,
+      tamaño: archivo.size,
+      estado: "pendiente" as const,
+      progreso: 0,
+    }));
+
+    setArchivos((prev) => [...prev, ...nuevosArchivos]);
+
+    // Procesar cada archivo
+    setCargando(true);
+
+    for (const archivo of archivosProcesar) {
+      const error = validarArchivo(archivo);
+
+      if (error) {
+        setArchivos((prev) =>
+          prev.map((a) =>
+            a.nombre === archivo.name
+              ? { ...a, estado: "error" as const, error }
+              : a
+          )
+        );
+        onError?.(error);
+        continue;
+      }
+
+      try {
+        // Actualizar estado a "cargando"
+        setArchivos((prev) =>
+          prev.map((a) =>
+            a.nombre === archivo.name ? { ...a, estado: "cargando" as const } : a
+          )
+        );
+
+        // Construir ruta completa en Supabase
+        const nombreArchivo = `${Date.now()}-${archivo.name}`;
+        const rutaCompleta = `${carpeta}${nombreArchivo}`;
+
+        // Subir archivo
+        const ruta = await subirArchivo(bucket, rutaCompleta, archivo);
+
+        // Actualizar estado a completado
+        setArchivos((prev) =>
+          prev.map((a) =>
+            a.nombre === archivo.name
+              ? {
+                  ...a,
+                  estado: "completado" as const,
+                  progreso: 100,
+                  ruta,
+                }
+              : a
+          )
+        );
+
+        onCargaCompleta?.(ruta);
+      } catch (err) {
+        const errorMsg =
+          err instanceof Error ? err.message : "Error desconocido al cargar";
+
+        setArchivos((prev) =>
+          prev.map((a) =>
+            a.nombre === archivo.name
+              ? {
+                  ...a,
+                  estado: "error" as const,
+                  error: errorMsg,
+                }
+              : a
+          )
+        );
+
+        onError?.(errorMsg);
+      }
+    }
+
+    setCargando(false);
+
+    // Limpiar input
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+
+  const limpiarArchivos = () => {
+    setArchivos([]);
+  };
+
+  const eliminarArchivo = (id: string) => {
+    setArchivos((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  return (
+    <div className={`carga-archivos ${className}`}>
+      {/* Input oculto */}
+      <input
+        ref={inputRef}
+        type="file"
+        multiple={multiple}
+        onChange={manejarSeleccionArchivos}
+        accept={tiposPermitidos.join(",")}
+        disabled={cargando}
+        style={{ display: "none" }}
+      />
+
+      {/* Zona de carga */}
+      <div
+        className="zona-carga"
+        onClick={() => inputRef.current?.click()}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => {
+          e.preventDefault();
+          if (inputRef.current) {
+            inputRef.current.files = e.dataTransfer.files;
+            manejarSeleccionArchivos({
+              target: inputRef.current,
+            } as React.ChangeEvent<HTMLInputElement>);
+          }
+        }}
+      >
+        <div className="zona-contenido">
+          <div className="zona-icon">📁</div>
+          <h4>Arrastra archivos aquí</h4>
+          <p>o haz clic para seleccionar</p>
+          <p className="zona-info">
+            Permitidos: {tiposPermitidos.join(", ")} (máx {tamañoMaxMB}MB)
+          </p>
+          <button
+            type="button"
+            className="btn-seleccionar"
+            onClick={(e) => {
+              e.stopPropagation();
+              inputRef.current?.click();
+            }}
+            disabled={cargando}
+          >
+            {cargando ? "Cargando..." : "Seleccionar archivo"}
+          </button>
+        </div>
+      </div>
+
+      {/* Lista de archivos */}
+      {archivos.length > 0 && (
+        <div className="lista-archivos">
+          <div className="lista-header">
+            <h5>Archivos</h5>
+            <button
+              type="button"
+              className="btn-limpiar"
+              onClick={limpiarArchivos}
+              disabled={cargando}
+            >
+              Limpiar
+            </button>
+          </div>
+
+          <div className="archivos">
+            {archivos.map((archivo) => (
+              <div key={archivo.id} className={`archivo-item ${archivo.estado}`}>
+                <div className="archivo-icon">
+                  {archivo.estado === "completado" ? "✓" : "📄"}
+                </div>
+
+                <div className="archivo-info">
+                  <p className="archivo-nombre">{archivo.nombre}</p>
+                  <p className="archivo-tamaño">
+                    {(archivo.tamaño / 1024).toFixed(1)} KB
+                  </p>
+
+                  {archivo.estado === "cargando" && (
+                    <div className="progreso-barra">
+                      <div
+                        className="progreso-relleno"
+                        style={{ width: `${archivo.progreso}%` }}
+                      ></div>
+                    </div>
+                  )}
+
+                  {archivo.estado === "error" && (
+                    <p className="archivo-error">{archivo.error}</p>
+                  )}
+                </div>
+
+                <div className="archivo-estado">
+                  {archivo.estado === "pendiente" && "⏳"}
+                  {archivo.estado === "cargando" && "⬆️"}
+                  {archivo.estado === "completado" && "✅"}
+                  {archivo.estado === "error" && "❌"}
+                </div>
+
+                <button
+                  type="button"
+                  className="btn-eliminar"
+                  onClick={() => eliminarArchivo(archivo.id)}
+                  disabled={archivo.estado === "cargando"}
+                  title="Eliminar de la lista"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        .carga-archivos {
+          width: 100%;
+        }
+
+        /* Zona de carga */
+        .zona-carga {
+          padding: var(--spacing-2xl);
+          border: 2px dashed var(--color-borde);
+          border-radius: var(--radius-lg);
+          background-color: var(--color-fondo);
+          cursor: pointer;
+          transition: all var(--transition-base);
+        }
+
+        .zona-carga:hover {
+          border-color: var(--color-acento-principal);
+          background-color: rgba(31, 78, 95, 0.02);
+        }
+
+        .zona-contenido {
+          text-align: center;
+        }
+
+        .zona-icon {
+          font-size: 3rem;
+          margin-bottom: var(--spacing-md);
+        }
+
+        .zona-carga h4 {
+          margin: 0 0 var(--spacing-sm) 0;
+          font-size: var(--font-size-lg);
+          color: var(--color-tinta-principal);
+        }
+
+        .zona-carga p {
+          margin: 0;
+          color: var(--color-tinta-secundaria);
+          font-size: var(--font-size-sm);
+        }
+
+        .zona-info {
+          margin-top: var(--spacing-md);
+          font-size: 0.75rem;
+          opacity: 0.8;
+        }
+
+        .btn-seleccionar {
+          margin-top: var(--spacing-lg);
+          padding: var(--spacing-md) var(--spacing-lg);
+          background-color: var(--color-acento-principal);
+          color: white;
+          border: none;
+          border-radius: var(--radius-md);
+          font-weight: var(--font-weight-semibold);
+          cursor: pointer;
+          transition: background-color var(--transition-base);
+        }
+
+        .btn-seleccionar:hover:not(:disabled) {
+          background-color: #153a4f;
+        }
+
+        .btn-seleccionar:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        /* Lista de archivos */
+        .lista-archivos {
+          margin-top: var(--spacing-lg);
+        }
+
+        .lista-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: var(--spacing-md);
+        }
+
+        .lista-header h5 {
+          margin: 0;
+          font-size: var(--font-size-base);
+        }
+
+        .btn-limpiar {
+          padding: 4px 12px;
+          background-color: transparent;
+          color: var(--color-tinta-secundaria);
+          border: 1px solid var(--color-borde);
+          border-radius: var(--radius-sm);
+          font-size: 0.75rem;
+          cursor: pointer;
+          transition: all var(--transition-base);
+        }
+
+        .btn-limpiar:hover:not(:disabled) {
+          background-color: var(--color-fondo);
+          color: var(--color-tinta-principal);
+        }
+
+        .btn-limpiar:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .archivos {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-sm);
+        }
+
+        /* Archivo item */
+        .archivo-item {
+          display: grid;
+          grid-template-columns: auto 1fr auto auto;
+          gap: var(--spacing-md);
+          align-items: center;
+          padding: var(--spacing-md);
+          background-color: var(--color-panel);
+          border: 1px solid var(--color-borde-claro);
+          border-radius: var(--radius-md);
+          transition: all var(--transition-base);
+        }
+
+        .archivo-item.completado {
+          border-left: 4px solid var(--color-semaforo-verde);
+        }
+
+        .archivo-item.error {
+          border-left: 4px solid var(--color-semaforo-rojo);
+          background-color: rgba(179, 38, 30, 0.05);
+        }
+
+        .archivo-item.cargando {
+          border-left: 4px solid var(--color-semaforo-ambar);
+        }
+
+        .archivo-icon {
+          font-size: 1.5rem;
+          flex-shrink: 0;
+        }
+
+        .archivo-info {
+          min-width: 0;
+        }
+
+        .archivo-nombre {
+          margin: 0 0 var(--spacing-xs) 0;
+          font-weight: var(--font-weight-semibold);
+          color: var(--color-tinta-principal);
+          word-break: break-word;
+        }
+
+        .archivo-tamaño {
+          margin: 0;
+          font-size: var(--font-size-sm);
+          color: var(--color-tinta-secundaria);
+        }
+
+        .progreso-barra {
+          margin-top: var(--spacing-sm);
+          height: 4px;
+          background-color: var(--color-borde-claro);
+          border-radius: 2px;
+          overflow: hidden;
+        }
+
+        .progreso-relleno {
+          height: 100%;
+          background-color: var(--color-semaforo-ambar);
+          transition: width 0.3s ease;
+        }
+
+        .archivo-error {
+          margin: var(--spacing-xs) 0 0 0;
+          font-size: 0.75rem;
+          color: var(--color-semaforo-rojo);
+          font-weight: var(--font-weight-medium);
+        }
+
+        .archivo-estado {
+          font-size: 1.25rem;
+          flex-shrink: 0;
+        }
+
+        .btn-eliminar {
+          padding: 4px 8px;
+          background-color: transparent;
+          border: none;
+          color: var(--color-tinta-secundaria);
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all var(--transition-base);
+          flex-shrink: 0;
+        }
+
+        .btn-eliminar:hover:not(:disabled) {
+          color: var(--color-semaforo-rojo);
+        }
+
+        .btn-eliminar:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+          .archivo-item {
+            grid-template-columns: auto 1fr auto;
+            gap: var(--spacing-sm);
+          }
+
+          .archivo-estado {
+            display: none;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}

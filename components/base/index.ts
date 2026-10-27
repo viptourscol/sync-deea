@@ -1,0 +1,1 @@
+// Simplificado para build

@@ -1,0 +1,363 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                    SYNC DEEA GOVTECH - PASO 1 COMPLETADO                   ║
+║                                                                            ║
+║              Secretaría de Desarrollo Económico, Empresarial y Agrícola    ║
+║                    Alcaldía Municipal de Montelíbano, Córdoba              ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+🎯 RESUMEN
+─────────────────────────────────────────────────────────────────────────────
+
+Has recibido la arquitectura COMPLETA de una plataforma GovTech de nivel 
+institucional con:
+
+  ✅ 30 tablas SQL diseñadas
+  ✅ 6 funciones y 9 triggers automáticos
+  ✅ 22 políticas de Row Level Security (RLS)
+  ✅ 4 vistas materializadas para reportes
+  ✅ Documentación completa en español
+  ✅ Estructura de proyecto Next.js 14
+  ✅ Script de automatización
+
+TOTAL: 1,312 líneas de SQL + 1,595 líneas de documentación
+TAMAÑO: 73 KB de código listo para usar
+
+─────────────────────────────────────────────────────────────────────────────
+
+📂 ARCHIVOS EN ESTE DIRECTORIO
+─────────────────────────────────────────────────────────────────────────────
+
+SQL (Ejecutar en Supabase):
+  1. schema_01_enums_y_tipos.sql              (20 KB) - Primero
+  2. schema_02_agenda_pendientes_config.sql   (18 KB) - Segundo  
+  3. schema_03_rls_y_datos_iniciales.sql      (16 KB) - Tercero
+
+DOCUMENTACIÓN (Leer en este orden):
+  1. README_PASO1.md                          (10 KB) - COMIENZA POR AQUÍ
+  2. PASO1_ESTRUCTURA_ESQUEMA.md              (18 KB) - Documentación completa
+  3. DIAGRAMA_RELACIONES.md                   (20 KB) - Visualización
+  4. ENTREGA_PASO1.md                         (12 KB) - Resumen ejecutivo
+  5. INDEX.md                                 (11 KB) - Índice de todo
+
+AUTOMATIZACIÓN:
+  1. SETUP.sh                                 (4 KB) - Script automatizado
+
+─────────────────────────────────────────────────────────────────────────────
+
+🚀 CÓMO COMENZAR EN 5 PASOS
+─────────────────────────────────────────────────────────────────────────────
+
+PASO 1: LEER LA REFERENCIA RÁPIDA
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Abre: README_PASO1.md                                                   │
+│ Tiempo: 5 minutos                                                       │
+│ Qué aprenderás: Stack, módulos, características principales             │
+└─────────────────────────────────────────────────────────────────────────┘
+
+PASO 2: ENTENDER LA ARQUITECTURA
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Abre: PASO1_ESTRUCTURA_ESQUEMA.md                                       │
+│ Tiempo: 15 minutos                                                      │
+│ Qué aprenderás: Estructura completa, tablas, funciones, seguridad       │
+└─────────────────────────────────────────────────────────────────────────┘
+
+PASO 3: CREAR PROYECTO EN SUPABASE
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 1. Ir a: https://app.supabase.com                                       │
+│ 2. Crear nuevo proyecto: "sync-deea-govtech"                            │
+│ 3. Región: América del Sur (Brasília o Bogotá)                          │
+│ 4. Esperar a que esté listo (2-3 minutos)                               │
+│ Tiempo: 5 minutos                                                       │
+└─────────────────────────────────────────────────────────────────────────┘
+
+PASO 4: EJECUTAR SCRIPTS SQL
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 1. En Supabase: Ir a SQL Editor                                         │
+│ 2. Copiar y ejecutar: schema_01_enums_y_tipos.sql                       │
+│ 3. Copiar y ejecutar: schema_02_agenda_pendientes_config.sql            │
+│ 4. Copiar y ejecutar: schema_03_rls_y_datos_iniciales.sql               │
+│ ✅ ¡Base de datos lista!                                                │
+│ Tiempo: 3 minutos (3 scripts)                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+PASO 5: CONFIGURAR PROYECTO
+┌─────────────────────────────────────────────────────────────────────────┐
+│ En Supabase:                                                             │
+│   • Settings → API → Copiar Project URL y keys                          │
+│   • Storage → Crear bucket "documentos-deea"                            │
+│                                                                         │
+│ En tu máquina:                                                           │
+│   • Crear archivo .env.local en raíz del proyecto                       │
+│   • Agregar variables (ver plantilla abajo)                             │
+│                                                                         │
+│ Tiempo: 3 minutos                                                       │
+└─────────────────────────────────────────────────────────────────────────┘
+
+TOTAL: ~30 MINUTOS PARA SETUP COMPLETO ⚡
+
+─────────────────────────────────────────────────────────────────────────────
+
+📋 PLANTILLA DE .env.local
+─────────────────────────────────────────────────────────────────────────────
+
+NEXT_PUBLIC_SUPABASE_URL=https://[PROJECT_ID].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[ANON_KEY]
+SUPABASE_SERVICE_ROLE_KEY=[SERVICE_ROLE_KEY]
+RESEND_API_KEY=[YOUR_RESEND_API_KEY]
+NEXT_PUBLIC_APP_EMAIL_FROM=noreply@sync-deea.gov.co
+NEXT_PUBLIC_APP_NAME=SYNC DEEA
+NEXT_PUBLIC_MUNICIPIO=Montelíbano
+NEXT_PUBLIC_DEPARTAMENTO=Córdoba
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+─────────────────────────────────────────────────────────────────────────────
+
+✨ QUÉ INCLUYE CADA ARCHIVO SQL
+─────────────────────────────────────────────────────────────────────────────
+
+schema_01_enums_y_tipos.sql (PRIMERO)
+├─ 13 tipos de datos ENUM
+├─ 18 tablas principales
+├─ Tabla usuarios con 7 roles
+├─ Tabla peticiones (CORE con semáforo automático)
+├─ Tabla correspondencia (entrada/salida)
+├─ Tabla contratos (con seguimiento)
+├─ Tabla proyectos (con cronograma)
+├─ Tablas misionales (productores, asociaciones, etc.)
+└─ Índices para optimización
+
+schema_02_agenda_pendientes_config.sql (SEGUNDO)
+├─ 12 tablas adicionales
+├─ Calendario unificado (agenda_eventos)
+├─ Tareas del equipo (pendientes)
+├─ Configuración del sistema
+├─ 6 funciones PL/pgSQL
+│  ├─ Semáforo automático
+│  ├─ Auditoría completa
+│  ├─ Generador de radicados
+│  └─ Control de fechas
+├─ 9 triggers automáticos
+└─ 4 vistas para reportes
+
+schema_03_rls_y_datos_iniciales.sql (TERCERO)
+├─ 22 políticas de RLS (por rol)
+├─ 6 términos legales (Art. 14 Ley 1755/2015)
+├─ 38 festivos Colombia 2024-2025
+├─ Configuración inicial
+└─ 2 plantillas de respuesta
+
+─────────────────────────────────────────────────────────────────────────────
+
+🎯 LOS 8 MÓDULOS DEL SISTEMA
+─────────────────────────────────────────────────────────────────────────────
+
+1. 📊 DASHBOARD EJECUTIVO
+   KPIs en tiempo real: peticiones vencidas, reuniones, contratos activos
+
+2. ⚖️  PETICIONES Y PQRSD
+   Derechos de Petición con semáforo automático y cálculo de vencimientos
+
+3. 📧 CORRESPONDENCIA
+   Entrada/Salida de oficios con folios automáticos
+
+4. 📋 CONTRATACIÓN PÚBLICA
+   Registro y supervisión de contratos públicos
+
+5. 🎯 PLANEACIÓN DE PROYECTOS
+   Proyectos con cronograma, indicadores y evidencias
+
+6. 🌾 DESARROLLO ECONÓMICO MISIONAL
+   Productores, asociaciones, CMDR, emprendedores
+
+7. 📅 AGENDA UNIFICADA
+   Calendario cruzado: reuniones, vencimientos, entregas
+
+8. 📧 NOTIFICACIONES Y EMAILS
+   Sistema de alertas y correos transaccionales
+
+─────────────────────────────────────────────────────────────────────────────
+
+🔐 SEGURIDAD IMPLEMENTADA
+─────────────────────────────────────────────────────────────────────────────
+
+✅ Row Level Security (22 políticas)
+   - Cada usuario ve solo sus datos autorizados
+   - Escalonamiento por rol
+
+✅ Auditoría Completa (RIPS compliant)
+   - Todos los cambios registrados
+   - Quién, cuándo, qué, valores anteriores/nuevos
+
+✅ Autenticación
+   - Supabase Auth con JWT
+   - Sesiones seguras
+
+✅ Criptografía
+   - HTTPS en producción
+   - Políticas de contraseña
+
+─────────────────────────────────────────────────────────────────────────────
+
+🎨 DISEÑO VISUAL (Del prototipo original)
+─────────────────────────────────────────────────────────────────────────────
+
+Fondo:         #E9EBE6  (Gris claro, papel)
+Paneles:       #FFFFFF  (Blanco)
+Texto:         #131A24  (Negro)
+Acento:        #1F4E5F  (Azul institucional)
+
+Semáforo:
+├─ Verde:      #2E7D4F  (OK, más de 5 días)
+├─ Ámbar:      #B87708  (ALERTA, ≤5 días)
+└─ Rojo:       #B3261E  (CRÍTICO, ≤2 días)
+
+Tipografía: Bodoni MT Pro (serif) + IBM Plex Mono (monospace)
+
+─────────────────────────────────────────────────────────────────────────────
+
+📚 TECNOLOGÍAS UTILIZADAS
+─────────────────────────────────────────────────────────────────────────────
+
+Frontend:    Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui
+Backend:     Supabase (PostgreSQL), Next.js API Routes
+Autenticación: Supabase Auth (JWT)
+Storage:     Supabase Storage (PDFs)
+Email:       Resend + React Email
+Deploy:      Vercel
+Cron Jobs:   Vercel Cron (7 AM Colombia)
+
+─────────────────────────────────────────────────────────────────────────────
+
+✅ CUMPLIMIENTO NORMATIVO
+─────────────────────────────────────────────────────────────────────────────
+
+✅ Ley 1755 de 2015  - Derechos de Petición (15d, 10d, 30d, 5d, 2d)
+✅ Ley 51 de 1983    - Calendario de festivos (38 festivos)
+✅ Decreto 1083/2015 - PQRSD
+✅ RIPS              - Auditoría y rastreabilidad
+✅ Ley 1581/2012     - Protección de datos (RLS)
+
+─────────────────────────────────────────────────────────────────────────────
+
+🚀 PRÓXIMOS PASOS (PASO 2)
+─────────────────────────────────────────────────────────────────────────────
+
+Una vez terminado Paso 1, procederemos a:
+
+PASO 2: UTILIDADES BASE
+├─ lib/fechas-colombia.ts      Motor de días hábiles
+├─ lib/supabase.ts             Cliente Supabase
+├─ lib/resend.ts               Email transaccional
+├─ lib/validations.ts          Validaciones Zod
+└─ lib/types.ts                Types TypeScript
+
+PASO 3: LAYOUT PRINCIPAL
+├─ Components de layout (Header, Sidebar, Footer)
+├─ Estilos globales
+├─ Membrete para impresión
+└─ Componentes base reutilizables
+
+PASO 4+: MÓDULOS FUNCIONALES
+├─ Implementar cada módulo
+├─ Conectar a Supabase
+├─ Email transaccional
+└─ Cron jobs
+
+─────────────────────────────────────────────────────────────────────────────
+
+📊 ESTADÍSTICAS
+─────────────────────────────────────────────────────────────────────────────
+
+Tablas:              30
+Funciones SQL:       6
+Triggers:            9
+Vistas:              4
+Políticas RLS:       22
+Índices:             25+
+Enums:               13
+Roles de usuario:    7
+Módulos:             8
+Líneas de SQL:       1,312
+Líneas de Doc:       1,595
+Total:               2,907 líneas
+Tamaño:              73 KB
+
+─────────────────────────────────────────────────────────────────────────────
+
+❓ PREGUNTAS FRECUENTES
+─────────────────────────────────────────────────────────────────────────────
+
+P: ¿Puedo ejecutar los scripts SQL en un orden diferente?
+R: NO. Ejecutar en orden: 01 → 02 → 03. El 02 depende del 01, el 03 del 02.
+
+P: ¿Dónde está el motor de cálculo de días hábiles?
+R: Se implementará en PASO 2 en lib/fechas-colombia.ts
+
+P: ¿Necesito crear manualmente el bucket de Storage?
+R: Sí. En Supabase: Storage → Create Bucket → Nombre: "documentos-deea"
+
+P: ¿Qué pasa si ejecuto un script dos veces?
+R: La mayoría de tablas tienen restricciones UNIQUE, dará error. Está bien.
+
+P: ¿Puedo modificar el esquema después?
+R: Sí. Todos los comentarios están en español. Las funciones son modulares.
+
+─────────────────────────────────────────────────────────────────────────────
+
+✅ CHECKLIST FINAL
+─────────────────────────────────────────────────────────────────────────────
+
+Antes de comenzar PASO 2:
+
+  □ Leí README_PASO1.md
+  □ Leí PASO1_ESTRUCTURA_ESQUEMA.md
+  □ Creé proyecto en Supabase
+  □ Ejecuté los 3 scripts SQL en orden
+  □ Creé bucket "documentos-deea"
+  □ Configuré .env.local
+  □ Configuré email de notificaciones
+  □ Hice backup de credenciales
+
+─────────────────────────────────────────────────────────────────────────────
+
+🎓 NOTAS IMPORTANTES
+─────────────────────────────────────────────────────────────────────────────
+
+1. TODO está documentado en español
+2. Los scripts SQL incluyen comentarios explicativos
+3. Las políticas RLS están listos para usar inmediatamente
+4. El semáforo se calcula automáticamente (no manual)
+5. Los radicados se generan automáticamente (no manual)
+6. La auditoría está habilitada por defecto
+7. Los festivos 2024-2025 ya están precargados
+
+─────────────────────────────────────────────────────────────────────────────
+
+📞 SOPORTE
+─────────────────────────────────────────────────────────────────────────────
+
+Para dificultades técnicas:
+  1. Revisar la documentación (PASO1_ESTRUCTURA_ESQUEMA.md)
+  2. Consultar DIAGRAMA_RELACIONES.md (visualización)
+  3. Revisar comentarios en SQL
+
+Para cambios de negocio:
+  1. Modificar tabla terminos_legales
+  2. Actualizar tabla festivos_colombia
+  3. Crear nuevas plantillas en plantillas_respuesta
+
+─────────────────────────────────────────────────────────────────────────────
+
+🎉 ¡PASO 1 COMPLETADO!
+
+Estado: ✅ Listo para PASO 2
+Próximo: Motor de fechas + Cliente Supabase + Validaciones Zod
+
+Generado: 27 de octubre de 2026
+Especialidad: GovTech - Arquitecto de Software Senior
+Institución: Secretaría de Desarrollo Económico, Empresarial y Agrícola
+             Montelíbano, Córdoba, Colombia
+
+─────────────────────────────────────────────────────────────────────────────
