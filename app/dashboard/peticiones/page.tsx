@@ -115,7 +115,7 @@ export default function PeticionesPage() {
           subtitle="Gestión de PQRSD y peticiones ciudadanas"
           icon={<FileText size={32} />}
           action={
-            <Button size="md">
+            <Button size="md" onClick={() => window.location.href = '/dashboard/peticiones/nueva'}>
               <Plus size={20} />
               Nueva Petición
             </Button>
