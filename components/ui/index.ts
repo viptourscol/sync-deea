@@ -5,3 +5,7 @@ export { default as Input } from './Input';
 export { default as Select } from './Select';
 export { default as Header } from './Header';
 export { default as KPICard } from './KPICard';
+export { default as Modal } from './Modal';
+export { default as Table } from './Table';
+export { default as Breadcrumb } from './Breadcrumb';
+export { default as Skeleton, SkeletonLine, SkeletonCard, SkeletonTable } from './Skeleton';
