@@ -2,11 +2,34 @@
 
 import { useState } from 'react';
 import Sidebar from '@/components/layout/Sidebar';
-import { Header, Button, Card, Select } from '@/components/ui';
+import { Header, Button, Card, Select, BarChart, LineChart, PieChartComponent } from '@/components/ui';
 import { Download, BarChart3 } from 'lucide-react';
 
 export default function ReportesPage() {
   const [selectedPeriod, setSelectedPeriod] = useState('mes');
+
+  // Data for charts
+  const peticionesPorTipo = [
+    { name: 'Petición General', value: 15, pv: 2400 },
+    { name: 'Documentos', value: 8, pv: 1398 },
+    { name: 'Consulta Jurídica', value: 12, pv: 9800 },
+    { name: 'Congresista', value: 5, pv: 3908 },
+    { name: 'Tutela', value: 2, pv: 4800 },
+  ];
+
+  const tendenciaMensual = [
+    { name: 'Sem 1', Procesadas: 10, Respondidas: 9, Pendientes: 1 },
+    { name: 'Sem 2', Procesadas: 14, Respondidas: 13, Pendientes: 2 },
+    { name: 'Sem 3', Procesadas: 12, Respondidas: 11, Pendientes: 3 },
+    { name: 'Sem 4', Procesadas: 18, Respondidas: 17, Pendientes: 1 },
+    { name: 'Sem 5', Procesadas: 15, Respondidas: 14, Pendientes: 2 },
+  ];
+
+  const estadosPeticiones = [
+    { name: 'Respondidas', value: 45 },
+    { name: 'En trámite', value: 12 },
+    { name: 'Pendientes', value: 3 },
+  ];
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -61,22 +84,35 @@ export default function ReportesPage() {
               ))}
             </div>
 
-            {/* Charts Placeholder */}
+            {/* Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-              <Card>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Peticiones por Tipo</h3>
-                <div className="h-64 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center text-gray-500">
-                  Gráfico de barras (recharts - próximamente)
-                </div>
+              <Card noPadding className="p-6">
+                <BarChart
+                  data={peticionesPorTipo}
+                  dataKey="value"
+                  title="Peticiones por Tipo"
+                  height={300}
+                />
               </Card>
 
-              <Card>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Tendencia Mensual</h3>
-                <div className="h-64 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center text-gray-500">
-                  Gráfico de líneas (recharts - próximamente)
-                </div>
+              <Card noPadding className="p-6">
+                <PieChartComponent
+                  data={estadosPeticiones}
+                  dataKey="value"
+                  title="Estados de Peticiones"
+                  height={300}
+                />
               </Card>
             </div>
+
+            <Card noPadding className="p-6 mb-8">
+              <LineChart
+                data={tendenciaMensual}
+                dataKey="Procesadas"
+                title="Tendencia Mensual de Peticiones"
+                height={350}
+              />
+            </Card>
 
             {/* Table Report */}
             <Card>

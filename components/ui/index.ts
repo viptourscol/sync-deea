@@ -12,3 +12,4 @@ export { default as Skeleton, SkeletonLine, SkeletonCard, SkeletonTable } from '
 export { default as FormField } from './FormField';
 export { default as Alert } from './Alert';
 export { default as Toast, ToastContainer } from './Toast';
+export { BarChart, LineChart, PieChartComponent } from './Charts';
