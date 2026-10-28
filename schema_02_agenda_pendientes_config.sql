@@ -64,7 +64,7 @@ CREATE TABLE public.pendientes (
   -- Vinculación a otros módulos
   peticion_vinculada UUID REFERENCES public.peticiones(id),
   contrato_vinculado UUID REFERENCES public.contratos(id),
-  proyecto_vinculado UUID REFERENCIAS public.proyectos_banco(id),
+  proyecto_vinculado UUID REFERENCES public.proyectos_banco(id),
   
   porcentaje_completado DECIMAL(5, 2) DEFAULT 0,
   notas TEXT,
