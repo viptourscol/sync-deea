@@ -20,7 +20,7 @@
       "static/chunks/fd9d1056-cce117dc4e21e608.js",
       "static/chunks/117-78d466e9c4558ff6.js",
       "static/chunks/main-app-c1e3e10de4cf374d.js",
-      "static/chunks/app/page-3f6d6b91a995566f.js"
+      "static/chunks/app/page-3e970e82c2c86b0a.js"
     ],
     "/login/page": [
       "static/chunks/webpack-03f7c6bc932ce1e3.js",
@@ -28,8 +28,8 @@
       "static/chunks/117-78d466e9c4558ff6.js",
       "static/chunks/main-app-c1e3e10de4cf374d.js",
       "static/chunks/44530001-3bf1abf623554b3e.js",
-      "static/chunks/811-4dafe5fe0514160a.js",
-      "static/chunks/app/login/page-9917678736795901.js"
+      "static/chunks/811-1db9f9842cec0260.js",
+      "static/chunks/app/login/page-192bc8c88b81d487.js"
     ],
     "/login/layout": [
       "static/chunks/webpack-03f7c6bc932ce1e3.js",
@@ -38,15 +38,15 @@
       "static/chunks/main-app-c1e3e10de4cf374d.js",
       "static/chunks/app/login/layout-557f5f66f03dca9a.js"
     ],
-    "/dashboard/page": [
+    "/dashboard/agenda/page": [
       "static/chunks/webpack-03f7c6bc932ce1e3.js",
       "static/chunks/fd9d1056-cce117dc4e21e608.js",
       "static/chunks/117-78d466e9c4558ff6.js",
       "static/chunks/main-app-c1e3e10de4cf374d.js",
       "static/chunks/44530001-3bf1abf623554b3e.js",
-      "static/chunks/811-4dafe5fe0514160a.js",
-      "static/chunks/957-52e65dfd59c8490a.js",
-      "static/chunks/app/dashboard/page-8ef03aa3497d0148.js"
+      "static/chunks/811-1db9f9842cec0260.js",
+      "static/chunks/694-10cf42b55aa60756.js",
+      "static/chunks/app/dashboard/agenda/page-b8f1a51e56577636.js"
     ],
     "/dashboard/layout": [
       "static/chunks/webpack-03f7c6bc932ce1e3.js",
@@ -55,15 +55,55 @@
       "static/chunks/main-app-c1e3e10de4cf374d.js",
       "static/chunks/app/dashboard/layout-09afbc490d354148.js"
     ],
+    "/dashboard/contratos/page": [
+      "static/chunks/webpack-03f7c6bc932ce1e3.js",
+      "static/chunks/fd9d1056-cce117dc4e21e608.js",
+      "static/chunks/117-78d466e9c4558ff6.js",
+      "static/chunks/main-app-c1e3e10de4cf374d.js",
+      "static/chunks/44530001-3bf1abf623554b3e.js",
+      "static/chunks/811-1db9f9842cec0260.js",
+      "static/chunks/694-10cf42b55aa60756.js",
+      "static/chunks/app/dashboard/contratos/page-78f0db901a141a65.js"
+    ],
+    "/dashboard/pendientes/page": [
+      "static/chunks/webpack-03f7c6bc932ce1e3.js",
+      "static/chunks/fd9d1056-cce117dc4e21e608.js",
+      "static/chunks/117-78d466e9c4558ff6.js",
+      "static/chunks/main-app-c1e3e10de4cf374d.js",
+      "static/chunks/44530001-3bf1abf623554b3e.js",
+      "static/chunks/811-1db9f9842cec0260.js",
+      "static/chunks/694-10cf42b55aa60756.js",
+      "static/chunks/app/dashboard/pendientes/page-07940cff3d2dfe4d.js"
+    ],
+    "/dashboard/page": [
+      "static/chunks/webpack-03f7c6bc932ce1e3.js",
+      "static/chunks/fd9d1056-cce117dc4e21e608.js",
+      "static/chunks/117-78d466e9c4558ff6.js",
+      "static/chunks/main-app-c1e3e10de4cf374d.js",
+      "static/chunks/44530001-3bf1abf623554b3e.js",
+      "static/chunks/811-1db9f9842cec0260.js",
+      "static/chunks/694-10cf42b55aa60756.js",
+      "static/chunks/app/dashboard/page-45538ec851ded52c.js"
+    ],
+    "/dashboard/correspondencia/page": [
+      "static/chunks/webpack-03f7c6bc932ce1e3.js",
+      "static/chunks/fd9d1056-cce117dc4e21e608.js",
+      "static/chunks/117-78d466e9c4558ff6.js",
+      "static/chunks/main-app-c1e3e10de4cf374d.js",
+      "static/chunks/44530001-3bf1abf623554b3e.js",
+      "static/chunks/811-1db9f9842cec0260.js",
+      "static/chunks/694-10cf42b55aa60756.js",
+      "static/chunks/app/dashboard/correspondencia/page-4847671c3a3a0ebf.js"
+    ],
     "/dashboard/peticiones/page": [
       "static/chunks/webpack-03f7c6bc932ce1e3.js",
       "static/chunks/fd9d1056-cce117dc4e21e608.js",
       "static/chunks/117-78d466e9c4558ff6.js",
       "static/chunks/main-app-c1e3e10de4cf374d.js",
       "static/chunks/44530001-3bf1abf623554b3e.js",
-      "static/chunks/811-4dafe5fe0514160a.js",
-      "static/chunks/957-52e65dfd59c8490a.js",
-      "static/chunks/app/dashboard/peticiones/page-55cd9b9a73313cb5.js"
+      "static/chunks/811-1db9f9842cec0260.js",
+      "static/chunks/694-10cf42b55aa60756.js",
+      "static/chunks/app/dashboard/peticiones/page-91d57b228304e271.js"
     ],
     "/dashboard/peticiones/layout": [
       "static/chunks/webpack-03f7c6bc932ce1e3.js",

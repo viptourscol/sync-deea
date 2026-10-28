@@ -2,6 +2,10 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
   "/login/page": "app/login/page.js",
+  "/dashboard/agenda/page": "app/dashboard/agenda/page.js",
+  "/dashboard/contratos/page": "app/dashboard/contratos/page.js",
+  "/dashboard/pendientes/page": "app/dashboard/pendientes/page.js",
   "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/correspondencia/page": "app/dashboard/correspondencia/page.js",
   "/dashboard/peticiones/page": "app/dashboard/peticiones/page.js"
 }
