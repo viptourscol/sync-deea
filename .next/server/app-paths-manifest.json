@@ -3,11 +3,11 @@
   "/page": "app/page.js",
   "/dashboard/correspondencia/page": "app/dashboard/correspondencia/page.js",
   "/dashboard/agenda/page": "app/dashboard/agenda/page.js",
+  "/dashboard/contratos/page": "app/dashboard/contratos/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/dashboard/pendientes/page": "app/dashboard/pendientes/page.js",
-  "/dashboard/contratos/page": "app/dashboard/contratos/page.js",
   "/dashboard/reportes/page": "app/dashboard/reportes/page.js",
   "/login/page": "app/login/page.js",
-  "/dashboard/peticiones/nueva/page": "app/dashboard/peticiones/nueva/page.js",
-  "/dashboard/peticiones/page": "app/dashboard/peticiones/page.js"
+  "/dashboard/peticiones/page": "app/dashboard/peticiones/page.js",
+  "/dashboard/peticiones/nueva/page": "app/dashboard/peticiones/nueva/page.js"
 }
